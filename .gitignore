@@ -1,0 +1,14 @@
+# IDE and editor files
+.codebuddy/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Node (in case of future build tools)
+node_modules/

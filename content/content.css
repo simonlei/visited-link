@@ -1,0 +1,18 @@
+/* Visited Link Highlighter - Content Styles */
+
+:root {
+  --vlh-bg-color: #FFFBCC;
+  --vlh-text-color: #1A1A2E;
+}
+
+a.vlh-visited {
+  background-color: var(--vlh-bg-color) !important;
+  color: var(--vlh-text-color) !important;
+  border-radius: 2px !important;
+  box-shadow: 0 0 0 1px rgba(74, 144, 217, 0.15) !important;
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+a.vlh-visited:hover {
+  box-shadow: 0 0 0 2px rgba(74, 144, 217, 0.3) !important;
+}

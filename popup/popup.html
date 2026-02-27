@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visited Link Highlighter</title>
+  <link rel="stylesheet" href="popup.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101" stroke="url(#grad1)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M10.172 13.828a4 4 0 005.656 0l4-4a4 4 0 10-5.656-5.656l-1.102 1.101" stroke="url(#grad2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <defs>
+          <linearGradient id="grad1" x1="4" y1="20" x2="16" y2="10"><stop stop-color="#4A90D9"/><stop offset="1" stop-color="#357ABD"/></linearGradient>
+          <linearGradient id="grad2" x1="8" y1="14" x2="20" y2="4"><stop stop-color="#357ABD"/><stop offset="1" stop-color="#4A90D9"/></linearGradient>
+        </defs>
+      </svg>
+      <h1 class="title">Visited Link</h1>
+    </div>
+    <label class="switch">
+      <input type="checkbox" id="enableToggle" checked>
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-card">
+    <div class="stats-ring-wrapper">
+      <svg class="stats-ring" viewBox="0 0 60 60">
+        <circle class="ring-bg" cx="30" cy="30" r="24" />
+        <circle class="ring-progress" id="statsRing" cx="30" cy="30" r="24" />
+      </svg>
+      <span class="stats-percent" id="statsPercent">-</span>
+    </div>
+    <div class="stats-text">
+      <div class="stats-numbers">
+        <span class="stats-visited" id="statsVisited">0</span>
+        <span class="stats-separator">/</span>
+        <span class="stats-total" id="statsTotal">0</span>
+      </div>
+      <div class="stats-label">visited links on this page</div>
+    </div>
+  </div>
+
+  <!-- Highlight Color Config -->
+  <div class="section">
+    <div class="section-title">
+      <svg class="section-icon" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="url(#colorGrad)"/><defs><linearGradient id="colorGrad" x1="2" y1="2" x2="22" y2="22"><stop stop-color="#4A90D9"/><stop offset="1" stop-color="#48BB78"/></linearGradient></defs></svg>
+      Highlight Colors
+    </div>
+    <div class="color-row">
+      <label class="color-label">Background</label>
+      <div class="color-input-group">
+        <input type="color" id="bgColorPicker" value="#FFFBCC" class="color-picker">
+        <span class="color-hex" id="bgColorHex">#FFFBCC</span>
+      </div>
+    </div>
+    <div class="color-row">
+      <label class="color-label">Text Color</label>
+      <div class="color-input-group">
+        <input type="color" id="textColorPicker" value="#1A1A2E" class="color-picker">
+        <span class="color-hex" id="textColorHex">#1A1A2E</span>
+      </div>
+    </div>
+    <div class="color-preview" id="colorPreview">
+      <a href="#" class="preview-link" onclick="return false;">Example Visited Link</a>
+    </div>
+  </div>
+
+  <!-- Ignore Params Config -->
+  <div class="section">
+    <div class="section-title">
+      <svg class="section-icon" viewBox="0 0 24 24" fill="none"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2v16z" stroke="#4A90D9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Ignore Parameters
+    </div>
+    <div class="tags-container" id="tagsContainer">
+      <div class="empty-hint" id="emptyHint">No parameters configured</div>
+    </div>
+    <div class="add-param-row">
+      <input type="text" id="paramInput" class="param-input" placeholder="e.g. frompage, utm_source">
+      <button id="addParamBtn" class="add-btn">Add</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <button id="refreshBtn" class="refresh-btn">
+      <svg class="refresh-icon" viewBox="0 0 24 24" fill="none"><path d="M23 4v6h-6M1 20v-6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Refresh Now
+    </button>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
