@@ -12,12 +12,11 @@
 
   /**
    * Apply highlight colors as CSS custom properties on the document
-   * @param {Object} config - Configuration with highlightBgColor and highlightTextColor
+   * @param {Object} config - Configuration with highlightTextColor
    */
   function applyHighlightColors(config) {
     const root = document.documentElement;
-    root.style.setProperty('--vlh-bg-color', config.highlightBgColor || '#FFFBCC');
-    root.style.setProperty('--vlh-text-color', config.highlightTextColor || '#1A1A2E');
+    root.style.setProperty('--vlh-text-color', config.highlightTextColor || '#C58AF9');
   }
 
   /**

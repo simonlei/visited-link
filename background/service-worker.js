@@ -9,8 +9,7 @@ importScripts('/utils/url-normalizer.js');
 const DEFAULT_CONFIG = {
   enabled: true,
   ignoreParams: [],
-  highlightBgColor: '#FFFBCC',
-  highlightTextColor: '#1A1A2E'
+  highlightTextColor: '#C58AF9'
 };
 
 // Cache for history queries (keyed by tab id)

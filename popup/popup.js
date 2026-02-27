@@ -6,15 +6,12 @@
 const DEFAULT_CONFIG = {
   enabled: true,
   ignoreParams: [],
-  highlightBgColor: '#FFFBCC',
-  highlightTextColor: '#1A1A2E'
+  highlightTextColor: '#C58AF9'
 };
 
 // DOM Elements
 const enableToggle = document.getElementById('enableToggle');
-const bgColorPicker = document.getElementById('bgColorPicker');
 const textColorPicker = document.getElementById('textColorPicker');
-const bgColorHex = document.getElementById('bgColorHex');
 const textColorHex = document.getElementById('textColorHex');
 const colorPreview = document.getElementById('colorPreview');
 const previewLink = colorPreview.querySelector('.preview-link');
@@ -64,10 +61,8 @@ function updateUI() {
   document.body.classList.toggle('disabled', !currentConfig.enabled);
 
   // Colors
-  bgColorPicker.value = currentConfig.highlightBgColor;
   textColorPicker.value = currentConfig.highlightTextColor;
-  bgColorHex.textContent = currentConfig.highlightBgColor.toUpperCase();
-  textColorHex.textContent = currentConfig.highlightTextColor.toUpperCase();
+  textColorHex.value = currentConfig.highlightTextColor.replace('#', '').toUpperCase();
   updateColorPreview();
 
   // Tags
@@ -78,7 +73,6 @@ function updateUI() {
  * Update the color preview link
  */
 function updateColorPreview() {
-  previewLink.style.backgroundColor = currentConfig.highlightBgColor;
   previewLink.style.color = currentConfig.highlightTextColor;
 }
 
@@ -218,24 +212,42 @@ enableToggle.addEventListener('change', () => {
   saveConfig();
 });
 
-bgColorPicker.addEventListener('input', () => {
-  currentConfig.highlightBgColor = bgColorPicker.value;
-  bgColorHex.textContent = bgColorPicker.value.toUpperCase();
-  updateColorPreview();
-});
-
-bgColorPicker.addEventListener('change', () => {
-  saveConfig();
-});
-
 textColorPicker.addEventListener('input', () => {
   currentConfig.highlightTextColor = textColorPicker.value;
-  textColorHex.textContent = textColorPicker.value.toUpperCase();
+  textColorHex.value = textColorPicker.value.replace('#', '').toUpperCase();
   updateColorPreview();
 });
 
 textColorPicker.addEventListener('change', () => {
   saveConfig();
+});
+
+textColorHex.addEventListener('input', () => {
+  let val = textColorHex.value.replace(/[^0-9A-Fa-f]/g, '').slice(0, 6);
+  textColorHex.value = val.toUpperCase();
+  if (val.length === 6) {
+    const color = '#' + val;
+    currentConfig.highlightTextColor = color;
+    textColorPicker.value = color;
+    updateColorPreview();
+  }
+});
+
+textColorHex.addEventListener('change', () => {
+  let val = textColorHex.value.replace(/[^0-9A-Fa-f]/g, '');
+  if (val.length === 3) {
+    val = val[0] + val[0] + val[1] + val[1] + val[2] + val[2];
+  }
+  if (val.length === 6) {
+    const color = '#' + val.toUpperCase();
+    currentConfig.highlightTextColor = color;
+    textColorPicker.value = color;
+    textColorHex.value = val.toUpperCase();
+    updateColorPreview();
+    saveConfig();
+  } else {
+    textColorHex.value = currentConfig.highlightTextColor.replace('#', '').toUpperCase();
+  }
 });
 
 addParamBtn.addEventListener('click', addParam);
