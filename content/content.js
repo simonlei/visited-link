@@ -181,6 +181,50 @@
     }
   }
 
+  /**
+   * Handle link clicks: immediately mark the clicked link as visited
+   * so the color updates without waiting for a full rescan.
+   */
+  function handleLinkClick(event) {
+    const anchor = event.target.closest('a[href]');
+    if (!anchor || anchor.classList.contains(HIGHLIGHT_CLASS)) return;
+
+    const href = anchor.href;
+    if (!href || href.startsWith('javascript:') || href.startsWith('#') ||
+        href.startsWith('chrome://') || href.startsWith('chrome-extension://')) {
+      return;
+    }
+
+    try {
+      new URL(href);
+    } catch {
+      return;
+    }
+
+    // Immediately mark as visited visually
+    anchor.classList.add(HIGHLIGHT_CLASS);
+
+    // Also mark all other links on the page with the same URL
+    const allAnchors = document.querySelectorAll('a[href]');
+    for (const a of allAnchors) {
+      if (a.href === href && !a.classList.contains(HIGHLIGHT_CLASS)) {
+        a.classList.add(HIGHLIGHT_CLASS);
+      }
+    }
+  }
+
+  document.addEventListener('click', handleLinkClick, true);
+
+  /**
+   * Re-scan links when the page becomes visible again (e.g. user switches
+   * back to this tab after visiting a link in another tab).
+   */
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      debouncedProcessLinks();
+    }
+  });
+
   // Listen for messages from popup/background
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === 'refreshHighlights') {

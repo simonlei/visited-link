@@ -177,6 +177,23 @@ async function notifyAllTabs() {
   }
 }
 
+// When user switches to a tab, notify it to re-scan links
+// (the visited link may have been clicked from this tab)
+chrome.tabs.onActivated.addListener(async (activeInfo) => {
+  try {
+    const tab = await chrome.tabs.get(activeInfo.tabId);
+    if (tab?.url && !tab.url.startsWith('chrome://')) {
+      // Clear cache for this tab so fresh history is queried
+      historyCache.delete(activeInfo.tabId);
+      chrome.tabs.sendMessage(activeInfo.tabId, { action: 'refreshHighlights' }).catch(() => {
+        // Content script might not be loaded
+      });
+    }
+  } catch {
+    // Tab may no longer exist
+  }
+});
+
 // Clean up cache when a tab is closed
 chrome.tabs.onRemoved.addListener((tabId) => {
   historyCache.delete(tabId);
