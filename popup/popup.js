@@ -6,6 +6,7 @@
 const DEFAULT_CONFIG = {
   enabled: true,
   ignoreParams: [],
+  ignoreHash: true,
   highlightTextColor: '#C58AF9'
 };
 
@@ -20,6 +21,7 @@ const emptyHint = document.getElementById('emptyHint');
 const paramInput = document.getElementById('paramInput');
 const addParamBtn = document.getElementById('addParamBtn');
 const refreshBtn = document.getElementById('refreshBtn');
+const ignoreHashToggle = document.getElementById('ignoreHashToggle');
 const statsVisited = document.getElementById('statsVisited');
 const statsTotal = document.getElementById('statsTotal');
 const statsPercent = document.getElementById('statsPercent');
@@ -59,6 +61,9 @@ function updateUI() {
   // Toggle
   enableToggle.checked = currentConfig.enabled;
   document.body.classList.toggle('disabled', !currentConfig.enabled);
+
+  // Ignore Hash
+  ignoreHashToggle.checked = currentConfig.ignoreHash !== false;
 
   // Colors
   textColorPicker.value = currentConfig.highlightTextColor;
@@ -259,6 +264,11 @@ paramInput.addEventListener('keydown', (e) => {
 });
 
 refreshBtn.addEventListener('click', refreshCurrentTab);
+
+ignoreHashToggle.addEventListener('change', () => {
+  currentConfig.ignoreHash = ignoreHashToggle.checked;
+  saveConfig();
+});
 
 // Initialize
 loadConfig().then(() => {

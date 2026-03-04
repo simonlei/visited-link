@@ -9,6 +9,7 @@ importScripts('/utils/url-normalizer.js');
 const DEFAULT_CONFIG = {
   enabled: true,
   ignoreParams: [],
+  ignoreHash: true,
   highlightTextColor: '#C58AF9'
 };
 
@@ -53,9 +54,10 @@ async function queryHistoryByDomain(domain) {
  * Uses domain-grouped batch querying and URL normalization
  * @param {string[]} urls - List of URLs to check
  * @param {string[]} ignoreParams - Parameters to ignore during comparison
+ * @param {boolean} ignoreHash - Whether to ignore URL hash/fragment
  * @returns {Promise<string[]>} List of visited original URLs
  */
-async function checkVisitedUrls(urls, ignoreParams) {
+async function checkVisitedUrls(urls, ignoreParams, ignoreHash) {
   // Group URLs by domain
   const domainGroups = new Map();
   const urlToOriginals = new Map(); // normalized -> [original URLs]
@@ -71,7 +73,7 @@ async function checkVisitedUrls(urls, ignoreParams) {
     }
     domainGroups.get(domain).push(url);
 
-    const normalized = UrlNormalizer.normalizeUrl(url, ignoreParams);
+    const normalized = UrlNormalizer.normalizeUrl(url, ignoreParams, ignoreHash);
     if (!urlToOriginals.has(normalized)) {
       urlToOriginals.set(normalized, []);
     }
@@ -88,12 +90,12 @@ async function checkVisitedUrls(urls, ignoreParams) {
         // Normalize all history URLs
         const normalizedHistory = new Set();
         for (const hUrl of historyUrls) {
-          normalizedHistory.add(UrlNormalizer.normalizeUrl(hUrl, ignoreParams));
+          normalizedHistory.add(UrlNormalizer.normalizeUrl(hUrl, ignoreParams, ignoreHash));
         }
 
         // Check each page URL against normalized history
         for (const pageUrl of domainUrls) {
-          const normalizedPageUrl = UrlNormalizer.normalizeUrl(pageUrl, ignoreParams);
+          const normalizedPageUrl = UrlNormalizer.normalizeUrl(pageUrl, ignoreParams, ignoreHash);
           if (normalizedHistory.has(normalizedPageUrl)) {
             visitedOriginalUrls.add(pageUrl);
           }
@@ -149,7 +151,8 @@ async function handleCheckVisited(message, sender) {
 
     const visitedUrls = await checkVisitedUrls(
       message.urls || [],
-      config.ignoreParams || []
+      config.ignoreParams || [],
+      config.ignoreHash !== false
     );
 
     return { visitedUrls, config };

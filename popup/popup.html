@@ -65,11 +65,21 @@
     </div>
   </div>
 
-  <!-- Ignore Params Config -->
+  <!-- Ignore Parameters Config -->
   <div class="section">
     <div class="section-title">
       <svg class="section-icon" viewBox="0 0 24 24" fill="none"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2v16z" stroke="#4A90D9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       Ignore Parameters
+    </div>
+    <div class="option-row">
+      <div class="option-info">
+        <span class="option-label">Ignore URL Hash (#)</span>
+        <span class="option-desc">Treat URLs with different #fragments as the same</span>
+      </div>
+      <label class="switch switch-small">
+        <input type="checkbox" id="ignoreHashToggle" checked>
+        <span class="slider"></span>
+      </label>
     </div>
     <div class="tags-container" id="tagsContainer">
       <div class="empty-hint" id="emptyHint">No parameters configured</div>

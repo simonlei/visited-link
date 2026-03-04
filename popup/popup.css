@@ -301,6 +301,49 @@ body {
   border-radius: 2px;
 }
 
+/* Option Row */
+.option-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0 10px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #EEF2F7;
+}
+
+.option-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.option-label {
+  font-size: 13px;
+  color: #4A5568;
+  font-weight: 500;
+}
+
+.option-desc {
+  font-size: 11px;
+  color: #A0AEC0;
+  font-weight: 400;
+}
+
+.switch-small {
+  width: 36px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.switch-small .slider::before {
+  height: 14px;
+  width: 14px;
+}
+
+.switch-small input:checked + .slider::before {
+  transform: translateX(16px);
+}
+
 /* Tags */
 .tags-container {
   display: flex;

@@ -10,9 +10,10 @@ const UrlNormalizer = (() => {
    * Normalize a URL by removing specified query parameters and sorting remaining ones
    * @param {string} url - Original URL string
    * @param {string[]} ignoreParams - List of query parameter names to ignore
+   * @param {boolean} ignoreHash - Whether to strip the hash/fragment from the URL
    * @returns {string} Normalized URL string; returns original string if URL is invalid
    */
-  function normalizeUrl(url, ignoreParams = []) {
+  function normalizeUrl(url, ignoreParams = [], ignoreHash = true) {
     try {
       const urlObj = new URL(url);
 
@@ -33,8 +34,11 @@ const UrlNormalizer = (() => {
 
       urlObj.searchParams.sort();
 
-      // Remove trailing hash if empty
-      if (urlObj.hash === '#') {
+      // Remove hash/fragment if ignoreHash is enabled
+      if (ignoreHash) {
+        urlObj.hash = '';
+      } else if (urlObj.hash === '#') {
+        // Remove trailing empty hash
         urlObj.hash = '';
       }
 
