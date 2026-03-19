@@ -1,0 +1,39 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get tag name
+        id: tag
+        run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Create zip package
+        run: |
+          zip -r "visited-link-${{ steps.tag.outputs.TAG_NAME }}.zip" \
+            manifest.json \
+            background/ \
+            content/ \
+            icons/ \
+            popup/ \
+            utils/ \
+            README.md \
+            README_CN.md
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: visited-link-${{ steps.tag.outputs.TAG_NAME }}.zip
+          generate_release_notes: true
