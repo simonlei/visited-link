@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Visited Link Highlighter",
-  "version": "1.0.1",
+  "version": "1.0.4",
   "description": "Highlight visited links on web pages with customizable colors and URL parameter ignore rules.",
   "permissions": [
     "history",
