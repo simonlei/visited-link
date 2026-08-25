@@ -60,6 +60,29 @@
   }
 
   /**
+   * Send a message to the background service worker with retry.
+   * MV3 service workers can be asleep or mid-restart, which briefly causes
+   * "Receiving end does not exist" errors. Retrying avoids noisy failures.
+   * @param {Object} message - Message to send
+   * @param {number} retries - Number of retry attempts
+   * @returns {Promise<any>}
+   */
+  async function sendMessageWithRetry(message, retries = 2) {
+    for (let attempt = 0; attempt <= retries; attempt++) {
+      try {
+        return await chrome.runtime.sendMessage(message);
+      } catch (error) {
+        const isReceiverMissing = error.message?.includes('Receiving end does not exist');
+        if (isReceiverMissing && attempt < retries) {
+          await new Promise((resolve) => setTimeout(resolve, 200 * (attempt + 1)));
+          continue;
+        }
+        throw error;
+      }
+    }
+  }
+
+  /**
    * Main function: scan links and apply highlights
    */
   async function processLinks() {
@@ -77,7 +100,7 @@
 
       const urls = Array.from(linkMap.keys());
 
-      const response = await chrome.runtime.sendMessage({
+      const response = await sendMessageWithRetry({
         action: 'checkVisited',
         urls: urls
       });
@@ -129,6 +152,11 @@
     } catch (error) {
       if (error.message?.includes('Extension context invalidated')) {
         disconnectObserver();
+        return;
+      }
+      // Service worker is not reachable (asleep or extension was reloaded).
+      // This is expected and non-fatal; a later scan will retry.
+      if (error.message?.includes('Receiving end does not exist')) {
         return;
       }
       console.error('[Visited Link] Error processing links:', error);
